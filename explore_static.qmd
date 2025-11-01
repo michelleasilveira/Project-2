@@ -1,0 +1,17 @@
+---
+title: "Superstore: Static Exploration"
+author: "Michelle Silveira"
+---
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+orders <- read_csv("superstore_orders.csv", show_col_types = FALSE) |>
+mutate(across(c(`Ship Mode`, Segment, Country, City, State, Region, Category, `Sub-Category`), as.factor))
+
+
+cat_vars <- c("Ship Mode","Segment","Country","State","Region","Category","Sub-Category")
+num_vars <- c("Sales","Quantity","Discount","Profit")
+```
+
