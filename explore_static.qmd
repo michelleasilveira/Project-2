@@ -20,8 +20,16 @@ editor:
 Exploring the Superstore Orders dataset to answer:
 
 > **Which categories and regions deliver the best profit margins, and how do discounts and shipping modes affect profitability?**
-
-Analysis: - Summarize categorical structure (one-/two-way tables) - Summarize numeric variables overall and by groups - Visualize key relationships (6+ multivariate plots with coloring/faceting) - Highlight top/bottom performing sub-categories by **profit margin** (`Profit/Sales`)
+>
+> Analysis
+>
+> -    Summarize categorical structure (one-/two-way tables)
+>
+> -    Summarize numeric variables overall and by groups
+>
+> -    Visualize key relationships (multivariate plots with coloring/faceting)
+>
+> -    Highlight top/bottom performing sub-categories by **profit margin** (`Profit/Sales`)
 
 ------------------------------------------------------------------------
 
@@ -290,7 +298,7 @@ Beyond that, the company likely loses money on many sales, especially in Technol
 Daily sales fluctuate significantly with peaks around promotional or holiday periods.
 No clear upward or downward long-term trend appears, implying that short-term promotions and seasonality play a major role in sales performance.
 
-*Business Conclusions to improve the superstore sales performance trying to answer the questions on Kaggle *
+*Business Conclusions to improve the superstore sales performance trying to answer the questions on Kaggle*
 
 -   Limit discounts on Technology and Furniture to protect profit margins.
 
