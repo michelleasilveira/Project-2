@@ -19,17 +19,17 @@ editor:
 
 Exploring the Superstore Orders dataset to answer:
 
-> **Which categories and regions deliver the best profit margins, and how do discounts and shipping modes affect profitability?**
->
-> Analysis
->
-> -    Summarize categorical structure (one-/two-way tables)
->
-> -    Summarize numeric variables overall and by groups
->
-> -    Visualize key relationships (multivariate plots with coloring/faceting)
->
-> -    Highlight top/bottom performing sub-categories by **profit margin** (`Profit/Sales`)
+*Which categories and regions deliver the best profit margins, and how do discounts and shipping modes affect profitability?*
+
+*Analysis*
+
+-   Summarize categorical structure (one-/two-way tables)
+
+-   Summarize numeric variables overall and by groups
+
+-   Visualize key relationships (multivariate plots with coloring/faceting)
+
+-    Highlight top/bottom performing sub-categories by **profit margin** (`Profit/Sales`)
 
 ------------------------------------------------------------------------
 
