@@ -1,17 +1,171 @@
 ---
 title: "Superstore: Static Exploration"
 author: "Michelle Silveira"
+format:
+  html:
+    toc: true
+    toc-title: "Sections"
+    code-fold: true
+execute:
+  echo: true
+  warning: false
+  message: false
 ---
 
+## Purpose & Business Question
+
+Exploring the Superstore Orders dataset to answer:
+
+> **Which categories and regions deliver the best profit margins, and how do discounts and shipping modes affect profitability?**
+
+Analysis:
+- Summarize categorical structure (one-/two-way tables)
+- Summarize numeric variables overall and by groups
+- Visualize key relationships (6+ multivariate plots with coloring/faceting)
+- Highlight top/bottom performing sub-categories by **profit margin** (`Profit/Sales`)
+
+---
+
+## Setup & Data
 
 ```{r}
 library(tidyverse)
-library(janitor)
-orders <- read_csv("superstore_orders.csv", show_col_types = FALSE) |>
-mutate(across(c(`Ship Mode`, Segment, Country, City, State, Region, Category, `Sub-Category`), as.factor))
+library(janitor)   # for tabyl/adorn_*
+library(lubridate)
 
+
+orders <- readr::read_csv("superstore_orders.csv", show_col_types = FALSE) |>
+  mutate(
+    across(c(`Ship Mode`, Segment, Country, City, State, Region, Category, `Sub-Category`), as.factor),
+    `Order Date` = as.Date(`Order Date`, format = "%m/%d/%Y"),
+    `Ship Date`  = as.Date(`Ship Date`,  format = "%m/%d/%Y"),
+    margin = if_else(Sales > 0, Profit / Sales, NA_real_) # profit margin
+  )
 
 cat_vars <- c("Ship Mode","Segment","Country","State","Region","Category","Sub-Category")
-num_vars <- c("Sales","Quantity","Discount","Profit")
+num_vars <- c("Sales","Quantity","Discount","Profit","margin")
+
+glimpse(orders)
+summary(dplyr::select(orders, Sales, Quantity, Discount, Profit))
+```
+# Missing values overview
+```{r}
+colSums(is.na(orders))
 ```
 
+
+# Date range in the data
+```{r}
+range(orders$`Order Date`, na.rm = TRUE)
+```
+# Quick uniqueness checks
+```{r}
+length(unique(orders$`Order ID`))
+length(unique(orders$`Product ID`))
+```
+
+# One-way: Region
+```{r}
+orders |>
+tabyl(Region) |>
+adorn_totals() |>
+adorn_pct_formatting(digits = 1)
+```
+
+# Two-way: Category x Region
+```{r}
+orders |>
+tabyl(Category, Region) |>
+adorn_totals(where = c("row","col"))
+```
+# Overall numeric summaries
+```{r}
+orders |>
+summarize(
+across(c(Sales, Profit, Discount, Quantity, margin),
+list(mean = ~mean(.x, na.rm = TRUE),
+sd   = ~sd(.x, na.rm = TRUE),
+med  = ~median(.x, na.rm = TRUE)))
+)
+```
+# By Category
+```{r}
+orders |>
+group_by(Category) |>
+summarize(
+n = dplyr::n(),
+sales_sum = sum(Sales, na.rm = TRUE),
+profit_sum = sum(Profit, na.rm = TRUE),
+margin_mean = mean(margin, na.rm = TRUE),
+.groups = "drop"
+) |>
+arrange(desc(margin_mean))
+```
+
+# 1) Orders by Region & Category
+```{r}
+orders |>
+ggplot(aes(Region, fill = Category)) +
+geom_bar() +
+labs(title = "Orders by Region & Category", x = NULL, y = "Count") +
+theme_minimal()
+```
+# 2) Sales distribution by Region (histogram + facets)
+```{r}
+orders |>
+ggplot(aes(Sales)) +
+geom_histogram(bins = 30) +
+facet_wrap(~Region) +
+labs(title = "Sales Distribution by Region", x = "Sales", y = "Frequency") +
+theme_minimal()
+```
+# 3) Profit by Sub-Category (boxplot)
+```{r}
+orders |>
+ggplot(aes(`Sub-Category`, Profit, color = Category)) +
+geom_boxplot(outlier.alpha = 0.35) +
+coord_flip() +
+labs(title = "Profit by Sub-Category (colored by Category)", x = NULL, y = "Profit") +
+theme_minimal()
+```
+# 4) Sales vs Profit by Segment & Category (scatter + facets)
+```{r}
+orders |>
+ggplot(aes(Sales, Profit, color = Segment)) +
+geom_point(alpha = 0.6) +
+facet_wrap(~Category, scales = "free") +
+labs(title = "Sales vs Profit by Segment (faceted by Category)",
+x = "Sales", y = "Profit") +
+theme_minimal()
+```
+
+# 5) Heatmap: Avg Profit Margin by Category & Region
+```{r}
+margin_cat_region <- orders |>
+group_by(Category, Region) |>
+summarize(avg_margin = mean(margin, na.rm = TRUE), .groups = "drop")
+
+ggplot(margin_cat_region, aes(Category, Region, fill = avg_margin)) +
+geom_tile() +
+labs(title = "Avg Profit Margin by Category & Region", x = NULL, y = NULL, fill = "Avg Margin") +
+theme_minimal()
+```
+# 6) Daily Sales over Time (line)
+```{r}
+orders |>
+group_by(`Order Date`) |>
+summarize(Sales = sum(Sales, na.rm = TRUE), .groups = "drop") |>
+ggplot(aes(`Order Date`, Sales)) +
+geom_line() +
+labs(title = "Daily Sales Over Time", x = NULL, y = "Sales") +
+theme_minimal()
+```
+# 7) Discount vs Profit by Category (scatter + facets)
+```{r}
+orders |>
+ggplot(aes(Discount, Profit, color = Category)) +
+geom_point(alpha = 0.5) +
+facet_wrap(~Category) +
+labs(title = "Discount vs Profit by Category", x = "Discount", y = "Profit") +
+theme_minimal()
+```

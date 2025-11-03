@@ -308,7 +308,7 @@ server <- function(input, output, session) {
     add_aes(p, input$color_cat, input$facet_cat)
   })
   
-  # 5) Heatmap (not covered in class)
+  # 5) Heatmap 
   output$plot5 <- renderPlot({
     df2 <- data_rv() |>
       dplyr::group_by(Category, `Sub-Category`) |>
