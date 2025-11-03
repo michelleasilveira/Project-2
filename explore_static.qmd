@@ -10,6 +10,9 @@ execute:
   echo: true
   warning: false
   message: false
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
 ## Purpose & Business Question
@@ -18,13 +21,9 @@ Exploring the Superstore Orders dataset to answer:
 
 > **Which categories and regions deliver the best profit margins, and how do discounts and shipping modes affect profitability?**
 
-Analysis:
-- Summarize categorical structure (one-/two-way tables)
-- Summarize numeric variables overall and by groups
-- Visualize key relationships (6+ multivariate plots with coloring/faceting)
-- Highlight top/bottom performing sub-categories by **profit margin** (`Profit/Sales`)
+Analysis: - Summarize categorical structure (one-/two-way tables) - Summarize numeric variables overall and by groups - Visualize key relationships (6+ multivariate plots with coloring/faceting) - Highlight top/bottom performing sub-categories by **profit margin** (`Profit/Sales`)
 
----
+------------------------------------------------------------------------
 
 ## Setup & Data
 
@@ -48,23 +47,28 @@ num_vars <- c("Sales","Quantity","Discount","Profit","margin")
 glimpse(orders)
 summary(dplyr::select(orders, Sales, Quantity, Discount, Profit))
 ```
+
 # Missing values overview
+
 ```{r}
 colSums(is.na(orders))
 ```
 
-
 # Date range in the data
+
 ```{r}
 range(orders$`Order Date`, na.rm = TRUE)
 ```
+
 # Quick uniqueness checks
+
 ```{r}
 length(unique(orders$`Order ID`))
 length(unique(orders$`Product ID`))
 ```
 
 # One-way: Region
+
 ```{r}
 orders |>
 tabyl(Region) |>
@@ -73,12 +77,15 @@ adorn_pct_formatting(digits = 1)
 ```
 
 # Two-way: Category x Region
+
 ```{r}
 orders |>
 tabyl(Category, Region) |>
 adorn_totals(where = c("row","col"))
 ```
+
 # Overall numeric summaries
+
 ```{r}
 orders |>
 summarize(
@@ -88,7 +95,9 @@ sd   = ~sd(.x, na.rm = TRUE),
 med  = ~median(.x, na.rm = TRUE)))
 )
 ```
+
 # By Category
+
 ```{r}
 orders |>
 group_by(Category) |>
@@ -102,7 +111,8 @@ margin_mean = mean(margin, na.rm = TRUE),
 arrange(desc(margin_mean))
 ```
 
-# 1) Orders by Region & Category
+# Orders by Region & Category
+
 ```{r}
 orders |>
 ggplot(aes(Region, fill = Category)) +
@@ -110,7 +120,9 @@ geom_bar() +
 labs(title = "Orders by Region & Category", x = NULL, y = "Count") +
 theme_minimal()
 ```
-# 2) Sales distribution by Region (histogram + facets)
+
+# Sales distribution by Region (histogram + facets)
+
 ```{r}
 orders |>
 ggplot(aes(Sales)) +
@@ -119,7 +131,9 @@ facet_wrap(~Region) +
 labs(title = "Sales Distribution by Region", x = "Sales", y = "Frequency") +
 theme_minimal()
 ```
-# 3) Profit by Sub-Category (boxplot)
+
+# Profit by Sub-Category (boxplot)
+
 ```{r}
 orders |>
 ggplot(aes(`Sub-Category`, Profit, color = Category)) +
@@ -128,7 +142,9 @@ coord_flip() +
 labs(title = "Profit by Sub-Category (colored by Category)", x = NULL, y = "Profit") +
 theme_minimal()
 ```
-# 4) Sales vs Profit by Segment & Category (scatter + facets)
+
+# Sales vs Profit by Segment & Category (scatter + facets)
+
 ```{r}
 orders |>
 ggplot(aes(Sales, Profit, color = Segment)) +
@@ -139,7 +155,8 @@ x = "Sales", y = "Profit") +
 theme_minimal()
 ```
 
-# 5) Heatmap: Avg Profit Margin by Category & Region
+# Heatmap: Avg Profit Margin by Category & Region
+
 ```{r}
 margin_cat_region <- orders |>
 group_by(Category, Region) |>
@@ -150,7 +167,9 @@ geom_tile() +
 labs(title = "Avg Profit Margin by Category & Region", x = NULL, y = NULL, fill = "Avg Margin") +
 theme_minimal()
 ```
-# 6) Daily Sales over Time (line)
+
+# Daily Sales over Time (line)
+
 ```{r}
 orders |>
 group_by(`Order Date`) |>
@@ -160,7 +179,9 @@ geom_line() +
 labs(title = "Daily Sales Over Time", x = NULL, y = "Sales") +
 theme_minimal()
 ```
-# 7) Discount vs Profit by Category (scatter + facets)
+
+# Discount vs Profit by Category (scatter + facets)
+
 ```{r}
 orders |>
 ggplot(aes(Discount, Profit, color = Category)) +
@@ -169,3 +190,114 @@ facet_wrap(~Category) +
 labs(title = "Discount vs Profit by Category", x = "Discount", y = "Profit") +
 theme_minimal()
 ```
+
+# Summary by ship mode
+
+```{r}
+orders |>
+group_by(`Ship Mode`) |>
+summarize(
+n           = dplyr::n(),
+sales_sum   = sum(Sales,  na.rm = TRUE),
+profit_sum  = sum(Profit, na.rm = TRUE),
+margin_mean = mean(margin, na.rm = TRUE),
+.groups = "drop"
+) |>
+arrange(desc(margin_mean))
+```
+
+# Profit distribution by ship mode
+
+```{r}
+orders |>
+ggplot(aes(`Ship Mode`, Profit)) +
+geom_boxplot() +
+labs(title = "Profit by Ship Mode", x = "Ship Mode", y = "Profit") +
+theme_minimal()
+
+orders_disc <- orders |>
+mutate(discount_bin = cut(
+Discount,
+breaks = c(-Inf, 0, 0.1, 0.3, 0.5, Inf),
+labels = c("0", "0–10%", "10–30%", "30–50%", ">50%")
+))
+
+# Discount Binning & Margin (Deep Dive)
+orders_disc <- orders |>
+mutate(discount_bin = cut(
+Discount,
+breaks = c(-Inf, 0, 0.1, 0.3, 0.5, Inf),
+labels = c("0", "0–10%", "10–30%", "30–50%", ">50%")
+))
+
+orders_disc |>
+group_by(discount_bin, Category) |>
+summarize(
+margin_mean = mean(margin, na.rm = TRUE),
+n = dplyr::n(),
+.groups = "drop"
+) |>
+arrange(discount_bin, desc(margin_mean))
+
+
+orders_disc |>
+ggplot(aes(discount_bin, margin, color = Category)) +
+geom_boxplot(outlier.alpha = 0.3) +
+labs(title = "Profit Margin by Discount Bin & Category",
+x = "Discount Bin", y = "Profit Margin") +
+theme_minimal()
+```
+
+# Final Insights and Conclusions
+
+*Regional and Category Performance*
+
+The West region leads in both total orders and profitability, followed by the East.
+Furniture and Office Supplies dominate in sales volume, while Technology—though smaller in number of orders—shows stronger average margins.
+The South region underperforms in both revenue and profit, suggesting opportunities for improved pricing or promotion.
+
+*Sales and Profit Distributions*
+
+Sales are highly right-skewed in every region, meaning most transactions are small while a few large ones drive total sales.
+Profit distribution includes several negative outliers, especially in Furniture, showing that some products are often sold at a loss due to deep discounts or high costs.
+
+*Sub-Category Profitability*
+
+High-margin sub-categories include Copiers, Phones, and Accessories, mainly in Technology.
+Low-margin or loss-leading sub-categories include Tables, Bookcases, and Binders, mostly under Furniture.
+This indicates that some product lines may require review or pricing adjustments.
+
+*Discount Effects*
+
+As discounts increase, profits decline sharply.
+Margins become negative beyond 30% discount, especially in Technology and Furniture, while Office Supplies remains profitable up to moderate discounts.
+This suggests an optimal discount threshold near 10–20% to maintain healthy margins.
+
+*Ship Mode Insights*
+
+Second Class shipping has the highest average profit margin (\~15%), slightly above Same Day and First Class.
+Standard Class, though the most used, has the lowest margins (\~11%), possibly due to high-cost bulk deliveries.
+This suggests that the company should analyze shipping costs and consider promoting more efficient modes.
+
+*Discount Bands*
+
+Profit margin analysis by discount bin confirms that heavy discounting erodes profitability.
+Margins remain positive only up to about 20–25% discount across categories.
+Beyond that, the company likely loses money on many sales, especially in Technology.
+
+*Temporal Trends*
+
+Daily sales fluctuate significantly with peaks around promotional or holiday periods.
+No clear upward or downward long-term trend appears, implying that short-term promotions and seasonality play a major role in sales performance.
+
+*Business Conclusions to improve the superstore sales performance trying to answer the questions on Kaggle *
+
+-   Limit discounts on Technology and Furniture to protect profit margins.
+
+-   Focus marketing efforts on the West and East regions where margins are strongest.
+
+-   Reevaluate low-margin Furniture items for cost or pricing issues.
+
+-   Encourage moderate promotions (10–20%) rather than heavy discounting.
+
+-   Review Standard Class shipping economics to identify efficiency improvements.

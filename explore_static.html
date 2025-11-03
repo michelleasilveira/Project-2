@@ -91,13 +91,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#two-way-category-x-region" id="toc-two-way-category-x-region" class="nav-link" data-scroll-target="#two-way-category-x-region">Two-way: Category x Region</a></li>
   <li><a href="#overall-numeric-summaries" id="toc-overall-numeric-summaries" class="nav-link" data-scroll-target="#overall-numeric-summaries">Overall numeric summaries</a></li>
   <li><a href="#by-category" id="toc-by-category" class="nav-link" data-scroll-target="#by-category">By Category</a></li>
-  <li><a href="#orders-by-region-category" id="toc-orders-by-region-category" class="nav-link" data-scroll-target="#orders-by-region-category">1) Orders by Region &amp; Category</a></li>
-  <li><a href="#sales-distribution-by-region-histogram-facets" id="toc-sales-distribution-by-region-histogram-facets" class="nav-link" data-scroll-target="#sales-distribution-by-region-histogram-facets">2) Sales distribution by Region (histogram + facets)</a></li>
-  <li><a href="#profit-by-sub-category-boxplot" id="toc-profit-by-sub-category-boxplot" class="nav-link" data-scroll-target="#profit-by-sub-category-boxplot">3) Profit by Sub-Category (boxplot)</a></li>
-  <li><a href="#sales-vs-profit-by-segment-category-scatter-facets" id="toc-sales-vs-profit-by-segment-category-scatter-facets" class="nav-link" data-scroll-target="#sales-vs-profit-by-segment-category-scatter-facets">4) Sales vs Profit by Segment &amp; Category (scatter + facets)</a></li>
-  <li><a href="#heatmap-avg-profit-margin-by-category-region" id="toc-heatmap-avg-profit-margin-by-category-region" class="nav-link" data-scroll-target="#heatmap-avg-profit-margin-by-category-region">5) Heatmap: Avg Profit Margin by Category &amp; Region</a></li>
-  <li><a href="#daily-sales-over-time-line" id="toc-daily-sales-over-time-line" class="nav-link" data-scroll-target="#daily-sales-over-time-line">6) Daily Sales over Time (line)</a></li>
-  <li><a href="#discount-vs-profit-by-category-scatter-facets" id="toc-discount-vs-profit-by-category-scatter-facets" class="nav-link" data-scroll-target="#discount-vs-profit-by-category-scatter-facets">7) Discount vs Profit by Category (scatter + facets)</a></li>
+  <li><a href="#orders-by-region-category" id="toc-orders-by-region-category" class="nav-link" data-scroll-target="#orders-by-region-category">Orders by Region &amp; Category</a></li>
+  <li><a href="#sales-distribution-by-region-histogram-facets" id="toc-sales-distribution-by-region-histogram-facets" class="nav-link" data-scroll-target="#sales-distribution-by-region-histogram-facets">Sales distribution by Region (histogram + facets)</a></li>
+  <li><a href="#profit-by-sub-category-boxplot" id="toc-profit-by-sub-category-boxplot" class="nav-link" data-scroll-target="#profit-by-sub-category-boxplot">Profit by Sub-Category (boxplot)</a></li>
+  <li><a href="#sales-vs-profit-by-segment-category-scatter-facets" id="toc-sales-vs-profit-by-segment-category-scatter-facets" class="nav-link" data-scroll-target="#sales-vs-profit-by-segment-category-scatter-facets">Sales vs Profit by Segment &amp; Category (scatter + facets)</a></li>
+  <li><a href="#heatmap-avg-profit-margin-by-category-region" id="toc-heatmap-avg-profit-margin-by-category-region" class="nav-link" data-scroll-target="#heatmap-avg-profit-margin-by-category-region">Heatmap: Avg Profit Margin by Category &amp; Region</a></li>
+  <li><a href="#daily-sales-over-time-line" id="toc-daily-sales-over-time-line" class="nav-link" data-scroll-target="#daily-sales-over-time-line">Daily Sales over Time (line)</a></li>
+  <li><a href="#discount-vs-profit-by-category-scatter-facets" id="toc-discount-vs-profit-by-category-scatter-facets" class="nav-link" data-scroll-target="#discount-vs-profit-by-category-scatter-facets">Discount vs Profit by Category (scatter + facets)</a></li>
+  <li><a href="#summary-by-ship-mode" id="toc-summary-by-ship-mode" class="nav-link" data-scroll-target="#summary-by-ship-mode">Summary by ship mode</a></li>
+  <li><a href="#profit-distribution-by-ship-mode" id="toc-profit-distribution-by-ship-mode" class="nav-link" data-scroll-target="#profit-distribution-by-ship-mode">Profit distribution by ship mode</a></li>
+  <li><a href="#final-insights-and-conclusions" id="toc-final-insights-and-conclusions" class="nav-link" data-scroll-target="#final-insights-and-conclusions">Final Insights and Conclusions</a></li>
   </ul>
 </nav>
 </div>
@@ -130,11 +133,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="purpose-business-question" class="level2">
 <h2 class="anchored" data-anchor-id="purpose-business-question">Purpose &amp; Business Question</h2>
-<p>We explore the Superstore Orders dataset to answer:</p>
+<p>Exploring the Superstore Orders dataset to answer:</p>
 <blockquote class="blockquote">
 <p><strong>Which categories and regions deliver the best profit margins, and how do discounts and shipping modes affect profitability?</strong></p>
 </blockquote>
-<p>We will: - Summarize categorical structure (one-/two-way tables) - Summarize numeric variables overall and by groups - Visualize key relationships (6+ multivariate plots with coloring/faceting) - Highlight top/bottom performing sub-categories by <strong>profit margin</strong> (<code>Profit/Sales</code>)</p>
+<p>Analysis: - Summarize categorical structure (one-/two-way tables) - Summarize numeric variables overall and by groups - Visualize key relationships (6+ multivariate plots with coloring/faceting) - Highlight top/bottom performing sub-categories by <strong>profit margin</strong> (<code>Profit/Sales</code>)</p>
 <hr>
 </section>
 <section id="setup-data" class="level2">
@@ -146,7 +149,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)   <span class="co"># for tabyl/adorn_*</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># CSV is in the project root; change the path if you moved it.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>orders <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"superstore_orders.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(<span class="st">`</span><span class="at">Ship Mode</span><span class="st">`</span>, Segment, Country, City, State, Region, Category, <span class="st">`</span><span class="at">Sub-Category</span><span class="st">`</span>), as.factor),</span>
@@ -342,7 +345,7 @@ $ margin          &lt;dbl&gt; 0.16000000, 0.30000000, 0.47000000, -0.40000000, 0
 </div>
 </section>
 <section id="orders-by-region-category" class="level1">
-<h1>1) Orders by Region &amp; Category</h1>
+<h1>Orders by Region &amp; Category</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -362,7 +365,7 @@ $ margin          &lt;dbl&gt; 0.16000000, 0.30000000, 0.47000000, -0.40000000, 0
 </div>
 </section>
 <section id="sales-distribution-by-region-histogram-facets" class="level1">
-<h1>2) Sales distribution by Region (histogram + facets)</h1>
+<h1>Sales distribution by Region (histogram + facets)</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -383,7 +386,7 @@ $ margin          &lt;dbl&gt; 0.16000000, 0.30000000, 0.47000000, -0.40000000, 0
 </div>
 </section>
 <section id="profit-by-sub-category-boxplot" class="level1">
-<h1>3) Profit by Sub-Category (boxplot)</h1>
+<h1>Profit by Sub-Category (boxplot)</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -404,7 +407,7 @@ $ margin          &lt;dbl&gt; 0.16000000, 0.30000000, 0.47000000, -0.40000000, 0
 </div>
 </section>
 <section id="sales-vs-profit-by-segment-category-scatter-facets" class="level1">
-<h1>4) Sales vs Profit by Segment &amp; Category (scatter + facets)</h1>
+<h1>Sales vs Profit by Segment &amp; Category (scatter + facets)</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -426,7 +429,7 @@ $ margin          &lt;dbl&gt; 0.16000000, 0.30000000, 0.47000000, -0.40000000, 0
 </div>
 </section>
 <section id="heatmap-avg-profit-margin-by-category-region" class="level1">
-<h1>5) Heatmap: Avg Profit Margin by Category &amp; Region</h1>
+<h1>Heatmap: Avg Profit Margin by Category &amp; Region</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -449,7 +452,7 @@ $ margin          &lt;dbl&gt; 0.16000000, 0.30000000, 0.47000000, -0.40000000, 0
 </div>
 </section>
 <section id="daily-sales-over-time-line" class="level1">
-<h1>6) Daily Sales over Time (line)</h1>
+<h1>Daily Sales over Time (line)</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -471,7 +474,7 @@ $ margin          &lt;dbl&gt; 0.16000000, 0.30000000, 0.47000000, -0.40000000, 0
 </div>
 </section>
 <section id="discount-vs-profit-by-category-scatter-facets" class="level1">
-<h1>7) Discount vs Profit by Category (scatter + facets)</h1>
+<h1>Discount vs Profit by Category (scatter + facets)</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -490,6 +493,139 @@ $ margin          &lt;dbl&gt; 0.16000000, 0.30000000, 0.47000000, -0.40000000, 0
 </div>
 </div>
 </div>
+</section>
+<section id="summary-by-ship-mode" class="level1">
+<h1>Summary by ship mode</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>orders <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(<span class="st">`</span><span class="at">Ship Mode</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>(</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="at">n           =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="at">sales_sum   =</span> <span class="fu">sum</span>(Sales,  <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="at">profit_sum  =</span> <span class="fu">sum</span>(Profit, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="at">margin_mean =</span> <span class="fu">mean</span>(margin, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(<span class="fu">desc</span>(margin_mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  `Ship Mode`        n sales_sum profit_sum margin_mean
+  &lt;fct&gt;          &lt;int&gt;     &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+1 Second Class    1945   459194.     57447.       0.150
+2 Same Day         543   128363.     15892.       0.138
+3 First Class     1538   351428.     48970.       0.116
+4 Standard Class  5968  1358216.    164089.       0.110</code></pre>
+</div>
+</div>
+</section>
+<section id="profit-distribution-by-ship-mode" class="level1">
+<h1>Profit distribution by ship mode</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>orders <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="st">`</span><span class="at">Ship Mode</span><span class="st">`</span>, Profit)) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Profit by Ship Mode"</span>, <span class="at">x =</span> <span class="st">"Ship Mode"</span>, <span class="at">y =</span> <span class="st">"Profit"</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="explore_static_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>orders_disc <span class="ot">&lt;-</span> orders <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">discount_bin =</span> <span class="fu">cut</span>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>Discount,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="cn">Inf</span>),</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span>, <span class="st">"0–10%"</span>, <span class="st">"10–30%"</span>, <span class="st">"30–50%"</span>, <span class="st">"&gt;50%"</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Discount Binning &amp; Margin (Deep Dive)</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>orders_disc <span class="ot">&lt;-</span> orders <span class="sc">|&gt;</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">discount_bin =</span> <span class="fu">cut</span>(</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>Discount,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="cn">Inf</span>),</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span>, <span class="st">"0–10%"</span>, <span class="st">"10–30%"</span>, <span class="st">"30–50%"</span>, <span class="st">"&gt;50%"</span>)</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>orders_disc <span class="sc">|&gt;</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(discount_bin, Category) <span class="sc">|&gt;</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>(</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="at">margin_mean =</span> <span class="fu">mean</span>(margin, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="at">n =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(discount_bin, <span class="fu">desc</span>(margin_mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 4
+   discount_bin Category        margin_mean     n
+   &lt;fct&gt;        &lt;fct&gt;                 &lt;dbl&gt; &lt;int&gt;
+ 1 0            Office Supplies      0.367   3129
+ 2 0            Furniture            0.290    836
+ 3 0            Technology           0.289    833
+ 4 0–10%        Technology           0.328      2
+ 5 0–10%        Office Supplies      0.249     16
+ 6 0–10%        Furniture            0.132     76
+ 7 10–30%       Office Supplies      0.232   2201
+ 8 10–30%       Technology           0.111    846
+ 9 10–30%       Furniture            0.0214   889
+10 30–50%       Technology          -0.158    143
+11 30–50%       Furniture           -0.414    167
+12 &gt;50%         Furniture           -0.785    153
+13 &gt;50%         Technology          -1.05      23
+14 &gt;50%         Office Supplies     -1.22     680</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>orders_disc <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(discount_bin, margin, <span class="at">color =</span> Category)) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>(<span class="at">outlier.alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Profit Margin by Discount Bin &amp; Category"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="at">x =</span> <span class="st">"Discount Bin"</span>, <span class="at">y =</span> <span class="st">"Profit Margin"</span>) <span class="sc">+</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="explore_static_files/figure-html/unnamed-chunk-17-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="final-insights-and-conclusions" class="level1">
+<h1>Final Insights and Conclusions</h1>
+<p><em>Regional and Category Performance</em></p>
+<p>The West region leads in both total orders and profitability, followed by the East. Furniture and Office Supplies dominate in sales volume, while Technology—though smaller in number of orders—shows stronger average margins. The South region underperforms in both revenue and profit, suggesting opportunities for improved pricing or promotion.</p>
+<p><em>Sales and Profit Distributions</em></p>
+<p>Sales are highly right-skewed in every region, meaning most transactions are small while a few large ones drive total sales. Profit distribution includes several negative outliers, especially in Furniture, showing that some products are often sold at a loss due to deep discounts or high costs.</p>
+<p><em>Sub-Category Profitability</em></p>
+<p>High-margin sub-categories include Copiers, Phones, and Accessories, mainly in Technology. Low-margin or loss-leading sub-categories include Tables, Bookcases, and Binders, mostly under Furniture. This indicates that some product lines may require review or pricing adjustments.</p>
+<p><em>Discount Effects</em></p>
+<p>As discounts increase, profits decline sharply. Margins become negative beyond 30% discount, especially in Technology and Furniture, while Office Supplies remains profitable up to moderate discounts. This suggests an optimal discount threshold near 10–20% to maintain healthy margins.</p>
+<p><em>Ship Mode Insights</em></p>
+<p>Second Class shipping has the highest average profit margin (~15%), slightly above Same Day and First Class. Standard Class, though the most used, has the lowest margins (~11%), possibly due to high-cost bulk deliveries. This suggests that the company should analyze shipping costs and consider promoting more efficient modes.</p>
+<p><em>Discount Bands</em></p>
+<p>Profit margin analysis by discount bin confirms that heavy discounting erodes profitability. Margins remain positive only up to about 20–25% discount across categories. Beyond that, the company likely loses money on many sales, especially in Technology.</p>
+<p><em>Temporal Trends</em></p>
+<p>Daily sales fluctuate significantly with peaks around promotional or holiday periods. No clear upward or downward long-term trend appears, implying that short-term promotions and seasonality play a major role in sales performance.</p>
+<p><em>Business Conclusions to improve the superstore sales performance trying to answer the questions on Kaggle </em></p>
+<ul>
+<li><p>Limit discounts on Technology and Furniture to protect profit margins.</p></li>
+<li><p>Focus marketing efforts on the West and East regions where margins are strongest.</p></li>
+<li><p>Reevaluate low-margin Furniture items for cost or pricing issues.</p></li>
+<li><p>Encourage moderate promotions (10–20%) rather than heavy discounting.</p></li>
+<li><p>Review Standard Class shipping economics to identify efficiency improvements.</p></li>
+</ul>
 </section>
 
 </main>
